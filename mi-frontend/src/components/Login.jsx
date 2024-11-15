@@ -9,16 +9,16 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/autenticar/login`, {
-                username,
-                password,
-            });
-            localStorage.setItem('token', response.data.token);
-            alert('Inicio de sesión exitoso');
-           
+            const response = await axios.post('http://localhost:5000/autenticar/login', { username, password });
+            console.log("Respuesta del servidor:", response.data);
+            if (response.data.token) {
+                localStorage.setItem('token', response.data.token);
+                alert(response.data.message); // Debería mostrar "Inicio de sesión exitoso"
+            }
         } catch (error) {
-            setError('Credenciales incorrectas');
+            alert(error.response.data.message || "Error en el inicio de sesión");
         }
+        
     };
 
     return (
@@ -56,32 +56,34 @@ const Login = () => {
 
 const styles = {
     container: {
-        position: 'fixed',    // Fija el contenedor en la pantalla
-        bottom: '370px',       // Coloca el contenedor a 20px del borde inferior
-        left: '50%',          // Centra el contenedor horizontalmente
-        transform: 'translateX(-50%)',  // Ajusta para que esté perfectamente centrado
-        maxWidth: '300px',    // Ancho máximo ajustado
-        padding: '20px',      // Relleno ajustado
+        position: 'fixed',   
+        bottom: '370px',       
+        left: '50%',         
+        transform: 'translateX(-50%)',  
+        maxWidth: '300px',    
+        padding: '20px',     
         border: '1px solid #ddd',
         borderRadius: '8px',
         textAlign: 'center',
+        backgroundColor:'#FFF0F5'
     },
     title: { fontSize: '24px', marginBottom: '20px' },
     form: { display: 'flex', flexDirection: 'column' },
     field: { marginBottom: '15px' },
     label: { marginBottom: '5px', fontWeight: 'bold' },
-    input: { padding: '8px', width: '100%' },
+    input: { padding: '8px', width: '100%', maxWidth:'270px', boxSizing: 'border-box'},
     button: {
         padding: '10px',
-        backgroundColor: '#007bff',
-        color: '#fff',
+        backgroundColor: '#f8c8dc',
+        color: '#000',
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
     },
     error: { color: 'red', marginBottom: '10px' },
     links: { marginTop: '10px', display: 'flex', justifyContent: 'space-between' },
-    link: { fontSize: '14px', color: '#007bff', textDecoration: 'none' },
+    link: { fontSize: '14px', color: '#000', textDecoration: 'none' },
 };
 
+document.body.style.backgroundColor = "#fbe3e5";
 export default Login;
